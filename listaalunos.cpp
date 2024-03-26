@@ -88,6 +88,29 @@ int deslocaEsquerda(Alunos * alunos, int pos) {
     return 1;
 }
 
+// Função para remover um aluno por RGM
+void remover_aluno_por_rgm(Alunos *alunos, char rgm[]) {
+    int posicao = -1;
+    // Encontrar a posição do aluno na lista usando o RGM
+    for (int i = 0; i <= alunos->n; i++) {
+        if (strcmp(alunos->vetor[i].rgm, rgm) == 0) {
+            posicao = i;
+            break;
+        }
+    }
+
+    if (posicao != -1) {
+        // Remover o aluno da lista
+        for (int i = posicao; i < alunos->n; i++) {
+            alunos->vetor[i] = alunos->vetor[i + 1];
+        }
+        alunos->n--;
+        printf("Aluno com RGM %s removido com sucesso.\n", rgm);
+    } else {
+        printf("Aluno com RGM %s não encontrado.\n", rgm);
+    }
+}
+
 int remover (Alunos * alunos, int pos) {
     if ( (pos > alunos->n) || (pos < 0) )
         return 0;
@@ -160,6 +183,7 @@ int main (int argc, char *argv[]) {
 	int loop = 1;
 	int numero = 0;
 	char nomeBusca[20];
+	
 	while(loop == 1){
     system("cls");
 	printf("\n\t\n\n");
@@ -198,9 +222,9 @@ int main (int argc, char *argv[]) {
 				
 				mostrar(&meusalunos);
 				
-				printf("\nInforme a posicao do nome que deseja apagar: ");
-                scanf("%d", &pos);
-                remover(&meusalunos, pos - 1);
+				printf("\nInforme o RGM que deseja apagar: ");
+                scanf("%s", nomeBusca);
+   				remover_aluno_por_rgm(&meusalunos, nomeBusca);
                 
                 mostrar(&meusalunos);
 				break;
