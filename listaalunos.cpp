@@ -5,6 +5,8 @@
 
 #define MAX 10
 
+// Projeto Lista sequencial e encadeada: Lista Alunos
+
 typedef struct aluno{
 	char nome[50];
 	int rgm;
@@ -41,7 +43,7 @@ int getTamanho(Alunos * alunos) {
 	return alunos->n + 1;
 }
 
-int lerNumero() { 
+int lerNumero() { //fun√ß√£o para ler a entrada do usu√°rio
     
     int numero;
     scanf("%d", &numero);
@@ -57,39 +59,46 @@ int main (int argc, char *argv[]) {
 	
 	meusalunos = criar();
 	
-	
+	int loop = 1;
 	int numero = 0;
 	
-        system("cls");
+	while(loop == 1){
+    	system("cls");
 	printf("\n\t\n\n");
 	printf("1. Cadastrar alunos\n");
 	printf("2. Listar alunos\n");
 	printf("3. Buscar alunos\n");
 	printf("4. Sair\n\n");
-	printf("Digite o n˙mero da opÁ„o que deseja: ");
+	printf("Digite o n√∫mero da op√ß√£o que deseja: ");
 	numero = lerNumero();
-	
-	if(numero < 1 || numero > 4) {
-            printf("OpÁ„o inv·lida!");
-            getchar(); // Limpa o buffer do teclado
-        }
-        
-    else{
     	
+	switch (numero) {
+            case 1:{
+                printf("Cadastrar aluno: ");
+		break;
+		}
+            case 2:{
+               	printf("Listar alunos: ");
+		break;
+		}
+            case 3:{
+                printf("Buscar alunos: ");
+		break;
+		}
+            case 4:{
+                printf("\nSaindo...");
+                loop = 0;
+		break;
+		}
+	    default:{
+		printf("\nOp√ß√£o Inv√°lida!\n");
+		break;
+		}
+        }
+        if (loop != 0) {
+		printf("\nDigite '1' para voltar ao menu, ou '0' para encerrar o programa.\n");
+		loop = lerNumero();
 	}
-	 switch (numero) {
-                case 1:
-                    printf("Cadastrar aluno: ");
-                    break;
-                case 2:
-                    printf("Listar alunos: ");
-                    break;
-                case 3:
-                    printf("Buscar alunos: ");
-                    break;
-                case 4:
-                    printf("Saindo...");
-                    break;
-            }
+	}
 	return 0;
 }
