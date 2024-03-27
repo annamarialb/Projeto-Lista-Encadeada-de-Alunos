@@ -10,6 +10,7 @@
 typedef struct aluno{
 	char nome[50];
 	char rgm[20];
+	struct Disciplina *disciplinas;
 }Aluno;
 
 typedef struct alunos{
@@ -22,6 +23,7 @@ typedef struct Disciplina {
     struct Disciplina *proxima;
 } Disciplina;
 
+//lista sequencia: ALUNOS
 Alunos criar() {
 	Alunos alunos;
 	
@@ -162,6 +164,18 @@ int buscaSequencial(Alunos * alunos, char rgm[]) {
     return -1;
 }
 
+// Função para inserir uma disciplina para um aluno
+void inserir_disciplina(Aluno *aluno, const char *nome_disciplina) {
+    Disciplina *nova_disciplina = (Disciplina*)malloc(sizeof(Disciplina));
+    if (nova_disciplina == NULL) {
+        printf("Erro: Não foi possível alocar memória para a disciplina.\n");
+        return;
+    }
+    strcpy(nova_disciplina->nome, nome_disciplina);
+    nova_disciplina->proxima = aluno->disciplinas;
+    aluno->disciplinas = nova_disciplina;
+}
+
 int lerNumero() { //função para ler a entrada do usuário
     
     int numero;
@@ -183,6 +197,7 @@ int main (int argc, char *argv[]) {
 	int loop = 1;
 	int numero = 0;
 	char nomeBusca[20];
+	char nome_disciplina[100];
 	
 	while(loop == 1){
     system("cls");
@@ -199,10 +214,34 @@ int main (int argc, char *argv[]) {
             case 1:{
                 printf("\n-----Cadastrando aluno-----\n");
                 printf("\nInforme o nome: ");
-                scanf("%s", aluno.nome);
+               fgets(aluno.nome, sizeof(aluno.nome), stdin);
+                aluno.nome[strcspn(aluno.nome, "\n")] = 0; // Remover o caractere de nova linha
                 printf("Informe o RGM: ");
                 scanf("%s", aluno.rgm);
+                 getchar(); // Limpar o buffer de entrada
+                
+                aluno.disciplinas = NULL;
                 inserirOrdenado(&meusalunos, aluno);
+                
+                // Inserindo a primeira disciplina para o aluno
+                printf("Informe o nome da disciplina: ");
+                getchar(); // Consumir o caractere de nova linha pendente
+                fgets(nome_disciplina, sizeof(nome_disciplina), stdin);
+                nome_disciplina[strcspn(nome_disciplina, "\n")] = 0; // Remover o caractere de nova linha
+                inserir_disciplina(&meusalunos.vetor[meusalunos.n], nome_disciplina);
+                
+                // Perguntando se deseja inserir mais disciplinas
+                int opcao_disciplina = 1;
+                while (opcao_disciplina) {
+                    printf("Deseja inserir mais uma disciplina para este aluno? (1-Sim | 0-Não): ");
+                    opcao_disciplina = lerNumero();
+                    if (opcao_disciplina) {
+                        printf("Informe o nome da disciplina: ");
+                        fgets(nome_disciplina, sizeof(nome_disciplina), stdin);
+                        nome_disciplina[strcspn(nome_disciplina, "\n")] = 0; // Remover o caractere de nova linha
+                        inserir_disciplina(&meusalunos.vetor[meusalunos.n], nome_disciplina);
+                    }
+            	}
 				break;
 			}
             case 2:{
