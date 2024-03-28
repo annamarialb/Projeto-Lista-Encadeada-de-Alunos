@@ -23,7 +23,7 @@ typedef struct Disciplina {
     struct Disciplina *proxima;
 } Disciplina;
 
-//lista sequencia: ALUNOS
+//lista sequencial: ALUNOS
 Alunos criar() {
 	Alunos alunos;
 	
@@ -222,8 +222,22 @@ void inserir_disciplina(Aluno *aluno, const char *nome_disciplina) {
         return;
     }
     strcpy(nova_disciplina->nome, nome_disciplina);
-    nova_disciplina->proxima = aluno->disciplinas;
-    aluno->disciplinas = nova_disciplina;
+    nova_disciplina->proxima = NULL; // A nova disciplina será a última da lista
+
+    // Verificar se o aluno já possui disciplinas cadastradas
+    if (aluno->disciplinas == NULL) {
+        // Se não possuir, a nova disciplina será a primeira da lista
+        aluno->disciplinas = nova_disciplina;
+    } else {
+        // Caso contrário, encontrar a última disciplina na lista e vincular a nova disciplina a ela
+        Disciplina *ultima_disciplina = aluno->disciplinas;
+        while (ultima_disciplina->proxima != NULL) {
+            ultima_disciplina = ultima_disciplina->proxima;
+        }
+        ultima_disciplina->proxima = nova_disciplina;
+    }
+
+    printf("Disciplina %s adicionada com sucesso para o aluno %s.\n", nome_disciplina, aluno->nome);
 }
 
 int lerNumero() { //função para ler a entrada do usuário
